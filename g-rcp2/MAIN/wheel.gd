@@ -186,6 +186,7 @@ func _physics_process(_delta):
 #		var steerr = 1
 		print(global_rotation)
 		look_at_from_position(translation,Vector3(car.steering_geometry[0],0.0,car.steering_geometry[1]))
+		# ^ the issue starts from here i believe
 		# maybe its like a race condition or whatever its called?
 		# you can sort of replicate this bug in the original godot 3 version 
 		# by simply typing global_rotation like here :
