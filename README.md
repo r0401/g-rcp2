@@ -1,3 +1,12 @@
+my attempt at porting this to godot 4,  
+the project runs but it has lots of visual issues,  
+main problem tho is that the wheels spin like crazy,  
+check wheel.gd script line 188,  
+
+
+
+# Original readme :  
+
 # VitaVehicle - "Realistic" Car Physics (g-rcp2/RCP4)
 # ![Screenshot_4](https://user-images.githubusercontent.com/88580430/201989925-6646ae2a-5a76-429f-bc60-427b23efe5b1.png) (Beta)
 
