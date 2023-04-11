@@ -1,11 +1,11 @@
-extends Spatial
+extends Node3D
 
 
-onready var velo1 = get_node("../../../velocity")
-onready var velo2 = get_node("../../../velocity2")
-onready var wheel_self = get_node("../../..")
+@onready var velo1 = get_node("../../../velocity")
+@onready var velo2 = get_node("../../../velocity2")
+@onready var wheel_self = get_node("../../..")
 
-export var dirt_type = false
+@export var dirt_type = false
 
 func _physics_process(delta):
 	var velo1_v = get_parent().get_parent().get_parent().velocity
@@ -13,8 +13,8 @@ func _physics_process(delta):
 	
 	visible = VitaVehicleSimulation.misc_smoke
 	
-	$revolvel.translation.x = float(wheel_self.TyreSettings["Width (mm)"]) *0.0030592/2
-	$revolver.translation.x = -float(wheel_self.TyreSettings["Width (mm)"]) *0.0030592/2
+	$revolvel.position.x = float(wheel_self.TyreSettings["Width (mm)"]) *0.0030592/2
+	$revolver.position.x = -float(wheel_self.TyreSettings["Width (mm)"]) *0.0030592/2
 	
 	$static.global_rotation = velo1.global_rotation
 	var direction = velo1_v*0.75
@@ -32,22 +32,27 @@ func _physics_process(delta):
 
 	for i in $static.get_children():
 		i.direction = direction
-		i.initial_velocity = direction.length()
-		i.translation.y = -wheel_self.w_size
+		i.initial_velocity_min = direction.length()
+		i.initial_velocity_max = direction.length()
+		i.position.y = -wheel_self.w_size
 		i.emitting = false
 
 
 	for i in $revolvel.get_children():
 		if wheel_self.wv>0:
-			i.orbit_velocity = 1.0
+			i.orbit_velocity_max = 1.0
+			i.orbit_velocity_min = 1.0
 		else:
-			i.orbit_velocity = -1.0
+			i.orbit_velocity_max = -1.0
+			i.orbit_velocity_min = -1.0
 		i.emitting = false
 	for i in $revolver.get_children():
 		if wheel_self.wv>0:
-			i.orbit_velocity = 1.0
+			i.orbit_velocity_max = 1.0
+			i.orbit_velocity_min = 1.0
 		else:
-			i.orbit_velocity = -1.0
+			i.orbit_velocity_max = -1.0
+			i.orbit_velocity_min = -1.0
 		i.emitting = false
 
 	if wheel_self.is_colliding():

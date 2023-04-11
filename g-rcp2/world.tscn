@@ -1,0 +1,74 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://base car.tscn" type="PackedScene" id=1]
+[ext_resource path="res://MAIN/misc/camera.gd" type="Script" id=2]
+[ext_resource path="res://MISC/debugger.tscn" type="PackedScene" id=3]
+[ext_resource path="res://FONT/DroidSans.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://MISC/scene swapper/scenes/Test Scene/scene.tscn" type="PackedScene" id=6]
+[ext_resource path="res://MISC/mobile controls/mobile.tscn" type="PackedScene" id=8]
+[ext_resource path="res://MISC/misc scripts/sky_setting.gd" type="Script" id=9]
+[ext_resource path="res://logo.png" type="Texture" id=13]
+
+[sub_resource type="DynamicFont" id=43]
+font_data = ExtResource( 4 )
+
+[sub_resource type="ProceduralSky" id=41]
+sun_latitude = 50.0
+sun_longitude = -157.5
+
+[sub_resource type="Environment" id=42]
+background_mode = 2
+background_sky = SubResource( 41 )
+
+[node name="world" type="Spatial"]
+
+[node name="watermark" type="TextureRect" parent="."]
+anchor_top = 0.816666
+anchor_right = 0.199219
+anchor_bottom = 0.983333
+texture = ExtResource( 13 )
+expand = true
+stretch_mode = 5
+
+[node name="author" type="Label" parent="."]
+anchor_top = 0.763333
+anchor_right = 0.214844
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 43 )
+text = "Made by: Jreo"
+valign = 2
+
+[node name="mobile_ctrls" parent="." instance=ExtResource( 8 )]
+visible = false
+
+[node name="debug" parent="." instance=ExtResource( 3 )]
+
+[node name="cam_chase" type="Position3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15 )
+script = ExtResource( 2 )
+mobile_controls = NodePath("../mobile_ctrls")
+car = NodePath("../car")
+
+[node name="orbit" type="Position3D" parent="cam_chase"]
+
+[node name="Camera" type="Camera" parent="cam_chase/orbit"]
+transform = Transform( 1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 4.5, 0 )
+cull_mask = 524287
+doppler_tracking = 2
+current = true
+near = 0.1
+far = 10000.0
+
+[node name="sun" type="DirectionalLight" parent="."]
+transform = Transform( 0.92388, 0.293153, -0.245984, 0, 0.642788, 0.766044, 0.382683, -0.707733, 0.593858, 0, 7.38043, 0 )
+shadow_bias = 1.0
+directional_shadow_split_1 = 0.025
+directional_shadow_max_distance = 1000.0
+
+[node name="test scene" parent="." instance=ExtResource( 6 )]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 42 )
+script = ExtResource( 9 )
+
+[node name="car" parent="." instance=ExtResource( 1 )]

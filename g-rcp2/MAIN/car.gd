@@ -1,41 +1,41 @@
-extends RigidBody
+extends RigidBody3D
 
 
-export var Debug_Mode = false
+@export var Debug_Mode = false
 
 # controls
-export var Use_Global_Control_Settings = false
-export var UseMouseSteering = false
-export var UseAccelerometreSteering = false
-export var SteerSensitivity = 1.0
-export var KeyboardSteerSpeed = 0.025
-export var KeyboardReturnSpeed = 0.05
-export var KeyboardCompensateSpeed = 0.1
+@export var Use_Global_Control_Settings = false
+@export var UseMouseSteering = false
+@export var UseAccelerometreSteering = false
+@export var SteerSensitivity = 1.0
+@export var KeyboardSteerSpeed = 0.025
+@export var KeyboardReturnSpeed = 0.05
+@export var KeyboardCompensateSpeed = 0.1
 
-export var SteerAmountDecay = 0.015 # understeer help
-export var SteeringAssistance = 1.0
-export var SteeringAssistanceAngular = 0.12
+@export var SteerAmountDecay = 0.015 # understeer help
+@export var SteeringAssistance = 1.0
+@export var SteeringAssistanceAngular = 0.12
 
-export var LooseSteering = false #simulate rack and pinion steering physics (EXPERIMENTAL)
+@export var LooseSteering = false #simulate rack and pinion steering physics (EXPERIMENTAL)
 
-export var OnThrottleRate = 0.2
-export var OffThrottleRate = 0.2
+@export var OnThrottleRate = 0.2
+@export var OffThrottleRate = 0.2
 
-export var OnBrakeRate = 0.05
-export var OffBrakeRate = 0.1
+@export var OnBrakeRate = 0.05
+@export var OffBrakeRate = 0.1
 
-export var OnHandbrakeRate = 0.2
-export var OffHandbrakeRate = 0.2
+@export var OnHandbrakeRate = 0.2
+@export var OffHandbrakeRate = 0.2
 
-export var OnClutchRate = 0.2
-export var OffClutchRate = 0.2
+@export var OnClutchRate = 0.2
+@export var OffClutchRate = 0.2
 
-export var MaxThrottle = 1.0
-export var MaxBrake = 1.0
-export var MaxHandbrake = 1.0
-export var MaxClutch = 1.0
+@export var MaxThrottle = 1.0
+@export var MaxBrake = 1.0
+@export var MaxHandbrake = 1.0
+@export var MaxClutch = 1.0
 
-export var GearAssistant = [
+@export var GearAssistant = [
 20, # Shift delay
 2, # Assistance Level (0 - 2)
 0.944087, # Speed Influence (will be automatically set)
@@ -46,15 +46,15 @@ export var GearAssistant = [
 ]
 
 # meta
-export var Controlled = true
+@export var Controlled = true
 
 # chassis
-export var Weight = 900.0 # kg
+@export var Weight = 900.0 # kg
 
 # body
-export var LiftAngle = 0.1
-export var DragCoefficient = 0.25
-export var Downforce = 0.0
+@export var LiftAngle = 0.1
+@export var DragCoefficient = 0.25
+@export var Downforce = 0.0
 
 
 
@@ -64,24 +64,24 @@ export var Downforce = 0.0
 
 
 #steering
-export var AckermannPoint = -3.8
-export var Steer_Radius = 13.0
+@export var AckermannPoint = -3.8
+@export var Steer_Radius = 13.0
 
 #drivetrain
-export(Array,String) var Powered_Wheels = ["fl","fr"]
+@export var Powered_Wheels :Array[String] = ["fl","fr"]
 
-export var FinalDriveRatio = 4.250
-export(Array, float) var GearRatios = [ 3.250, 1.894, 1.259, 0.937, 0.771 ]
-export var ReverseRatio = 3.153
+@export var FinalDriveRatio = 4.250
+@export var GearRatios :Array[float] = [ 3.250, 1.894, 1.259, 0.937, 0.771 ]
+@export var ReverseRatio = 3.153
 
-export var RatioMult = 9.5
-export var StressFactor = 1.0
-export var GearGap = 60.0
-export var DSWeight = 150.0 # Leave this be, unless you know what you're doing.
+@export var RatioMult = 9.5
+@export var StressFactor = 1.0
+@export var GearGap = 60.0
+@export var DSWeight = 150.0 # Leave this be, unless you know what you're doing.
 
-export(int, "Fully Manual", "Automatic", "Continuously Variable", "Semi-Auto") var TransmissionType = 0
+@export_enum("Fully Manual", "Automatic", "Continuously Variable", "Semi-Auto") var TransmissionType = 0
 
-export var AutoSettings = [
+@export var AutoSettings = [
 6500.0, # shift rpm (auto)
 300.0, # downshift threshold (auto)
 0.5, # throttle efficiency threshold (range: 0 - 1) (auto/dct)
@@ -89,7 +89,7 @@ export var AutoSettings = [
 4000.0, # engagement rpm (auto/dct/cvt)
 ]
 
-export var CVTSettings = [
+@export var CVTSettings = [
 0.75, # throttle efficiency threshold (range: 0 - 1)
 0.025, # acceleration rate (range: 0 - 1)
 0.9, # iteration 1 (higher = higher rpm)
@@ -102,7 +102,7 @@ export var CVTSettings = [
 
 
 #stability
-export var ABS = [ # anti-lock braking system
+@export var ABS = [ # anti-lock braking system
 2500.0, # threshold
 1, # pump time
 10, # vehicle speed before activation
@@ -112,7 +112,7 @@ true, # enabled
 2, # lateral pump time
 ]
 
-export var ESP = [ # electronic stability program
+@export var ESP = [ # electronic stability program
 0.5, # stabilisation theshold
 1.5, # stabilisation rate (higher = understeer, understeer = inefficient)
 1, # yaw threshold
@@ -120,13 +120,13 @@ export var ESP = [ # electronic stability program
 false, # enableda
 ]
 
-export var BTCS = [ # brake-based traction control system
+@export var BTCS = [ # brake-based traction control system
 10, # threshold
 0.05, # sensitivity
 false, # enabled
 ]
 
-export var TTCS = [ # throttle-based traction control system
+@export var TTCS = [ # throttle-based traction control system
 5, # threshold
 1.0, # sensitivity
 false, # enabled
@@ -134,77 +134,77 @@ false, # enabled
 
 
 #differentials
-export var Locking = 0.1
-export var CoastLocking = 0.0
-export var Preload = 0.0
+@export var Locking = 0.1
+@export var CoastLocking = 0.0
+@export var Preload = 0.0
 
-export var Centre_Locking = 0.5
-export var Centre_CoastLocking = 0.5
-export var Centre_Preload = 0.0
+@export var Centre_Locking = 0.5
+@export var Centre_CoastLocking = 0.5
+@export var Centre_Preload = 0.0
 
 #engine
-export var RevSpeed = 2.0 # Flywheel lightness
-export var EngineFriction = 18000.0
-export var EngineDrag = 0.006
-export var ThrottleResponse = 0.5
-export var DeadRPM = 100.0
+@export var RevSpeed = 2.0 # Flywheel lightness
+@export var EngineFriction = 18000.0
+@export var EngineDrag = 0.006
+@export var ThrottleResponse = 0.5
+@export var DeadRPM = 100.0
 
 #ECU
-export var RPMLimit = 7000.0
-export var LimiterDelay = 4
-export var IdleRPM = 800.0
-export var ThrottleLimit = 0.0
-export var ThrottleIdle = 0.25
-export var VVTRPM = 4500.0 # set this beyond the rev range to disable it, set it to 0 to use this vvt state permanently
+@export var RPMLimit = 7000.0
+@export var LimiterDelay = 4
+@export var IdleRPM = 800.0
+@export var ThrottleLimit = 0.0
+@export var ThrottleIdle = 0.25
+@export var VVTRPM = 4500.0 # set this beyond the rev range to disable it, set it to 0 to use this vvt state permanently
 
 #torque normal state
-export var BuildUpTorque = 0.0035
-export var TorqueRise = 30.0
-export var RiseRPM = 1000.0
-export var OffsetTorque = 110.0
-export var FloatRate = 0.1
-export var DeclineRate = 1.5
-export var DeclineRPM = 3500.0
-export var DeclineSharpness = 1.0
+@export var BuildUpTorque = 0.0035
+@export var TorqueRise = 30.0
+@export var RiseRPM = 1000.0
+@export var OffsetTorque = 110.0
+@export var FloatRate = 0.1
+@export var DeclineRate = 1.5
+@export var DeclineRPM = 3500.0
+@export var DeclineSharpness = 1.0
 
-#torque export variable valve timing triggered
-export var VVT_BuildUpTorque = 0.0
-export var VVT_TorqueRise = 60.0
-export var VVT_RiseRPM = 1000.0
-export var VVT_OffsetTorque = 70.0
-export var VVT_FloatRate = 0.1
-export var VVT_DeclineRate = 2.0
-export var VVT_DeclineRPM = 5000.0
-export var VVT_DeclineSharpness = 1.0
+#torque @export variable valve timing triggered
+@export var VVT_BuildUpTorque = 0.0
+@export var VVT_TorqueRise = 60.0
+@export var VVT_RiseRPM = 1000.0
+@export var VVT_OffsetTorque = 70.0
+@export var VVT_FloatRate = 0.1
+@export var VVT_DeclineRate = 2.0
+@export var VVT_DeclineRPM = 5000.0
+@export var VVT_DeclineSharpness = 1.0
 
 #clutch
-export var ClutchStable = 0.5
-export var GearRatioRatioThreshold = 200.0
-export var ThresholdStable = 0.01
-export var ClutchGrip = 176.125
-export var ClutchFloatReduction = 27.0
+@export var ClutchStable = 0.5
+@export var GearRatioRatioThreshold = 200.0
+@export var ThresholdStable = 0.01
+@export var ClutchGrip = 176.125
+@export var ClutchFloatReduction = 27.0
 
-export var ClutchWobble = 2.5*0
-export var ClutchElasticity = 0.2*0
-export var WobbleRate = 0.0
+@export var ClutchWobble = 2.5*0
+@export var ClutchElasticity = 0.2*0
+@export var WobbleRate = 0.0
 
 #forced inductions
-export var MaxPSI = 9.0 # Maximum air generated by any forced inductions
-export var EngineCompressionRatio = 8.0 # Piston travel distance
+@export var MaxPSI = 9.0 # Maximum air generated by any forced inductions
+@export var EngineCompressionRatio = 8.0 # Piston travel distance
 #turbo
-export var TurboEnabled = false # Enables turbo
-export var TurboAmount = 1 # Turbo power multiplication.
-export var TurboSize = 8.0 # Higher = More turbo lag
-export var Compressor = 0.3 # Higher = Allows more spooling on low RPM
-export var SpoolThreshold = 0.1 # Range: 0 - 0.9999
-export var BlowoffRate = 0.14
-export var TurboEfficiency = 0.075 # Range: 0 - 1
-export var TurboVacuum = 1.0 # Performance deficiency upon turbo idle
+@export var TurboEnabled = false # Enables turbo
+@export var TurboAmount = 1 # Turbo power multiplication.
+@export var TurboSize = 8.0 # Higher = More turbo lag
+@export var Compressor = 0.3 # Higher = Allows more spooling on low RPM
+@export var SpoolThreshold = 0.1 # Range: 0 - 0.9999
+@export var BlowoffRate = 0.14
+@export var TurboEfficiency = 0.075 # Range: 0 - 1
+@export var TurboVacuum = 1.0 # Performance deficiency upon turbo idle
 #supercharger
-export var SuperchargerEnabled = false # Enables supercharger
-export var SCRPMInfluence = 1.0
-export var BlowRate = 35.0
-export var SCThreshold = 6.0
+@export var SuperchargerEnabled = false # Enables supercharger
+@export var SCRPMInfluence = 1.0
+@export var BlowRate = 35.0
+@export var SCThreshold = 6.0
 
 var rpm = 0.0
 var rpmspeed = 0.0
@@ -291,11 +291,11 @@ var rvelocity = Vector3(0,0,0)
 var stalled = 0.0
 
 func bullet_fix():
-	var offset = $DRAG_CENTRE.translation
+	var offset = $DRAG_CENTRE.position
 	AckermannPoint -= offset.z
 	
 	for i in get_children():
-		i.translation -= offset
+		i.position -= offset
 
 func _ready():
 #	bullet_fix()
@@ -344,7 +344,7 @@ func controls():
 			
 			steer_velocity += steer*(i.directional_force.z*0.0005)*i.Caster
 
-			if i.translation.x>0:
+			if i.position.x>0:
 				steer_velocity += i.directional_force.z*0.0001
 			else:
 				steer_velocity -= i.directional_force.z*0.0001
@@ -387,7 +387,7 @@ func controls():
 		var siding = abs(velocity.x)
 
 		if velocity.x>0 and steer2>0 or velocity.x<0 and steer2<0:
-			 siding = 0.0
+			siding = 0.0
 			
 		var going = velocity.z/(siding +1.0)
 		if going<0:
@@ -564,16 +564,16 @@ func transmission():
 			var assistshiftspeed = (GearAssistant[4]/ratio)*GearAssistant[2]
 			var assistdownshiftspeed = (GearAssistant[3]/abs((GearRatios[gear-2]*FinalDriveRatio)*RatioMult))*GearAssistant[2]
 			if gear == 0:
-				 if gas:
-					  sassistdel -= 1
-					  if sassistdel<0:
-						  actualgear = 1
-				 elif brake:
-					  sassistdel -= 1
-					  if sassistdel<0:
-						  actualgear = -1
-				 else:
-					  sassistdel = 60
+				if gas:
+					sassistdel -= 1
+					if sassistdel<0:
+						actualgear = 1
+				elif brake:
+					sassistdel -= 1
+					if sassistdel<0:
+						actualgear = -1
+				else:
+					sassistdel = 60
 			elif linear_velocity.length()<5:
 				if not gas and gear == 1 or not brake and gear == -1:
 					sassistdel = 60
@@ -641,16 +641,16 @@ func transmission():
 					actualgear -= 1
 		else:
 			if gear == 0:
-				 if gas:
-					  sassistdel -= 1
-					  if sassistdel<0:
-						  actualgear = 1
-				 elif brake:
-					  sassistdel -= 1
-					  if sassistdel<0:
-						  actualgear = -1
-				 else:
-					  sassistdel = 60
+				if gas:
+					sassistdel -= 1
+					if sassistdel<0:
+						actualgear = 1
+				elif brake:
+					sassistdel -= 1
+					if sassistdel<0:
+						actualgear = -1
+				else:
+					sassistdel = 60
 			elif linear_velocity.length()<5:
 				if not gas and gear == 1 or not brake and gear == -1:
 					sassistdel = 60
@@ -675,11 +675,11 @@ func transmission():
 			elif sd:
 				gear -= 1
 			if gear<1:
-				 gear = 1
+				gear = 1
 			elif gear>len(GearRatios):
-				 gear = len(GearRatios)
+				gear = len(GearRatios)
 		else:
-			 gear = actualgear
+			gear = actualgear
 	elif TransmissionType == 2:
 
 		
@@ -698,16 +698,16 @@ func transmission():
 					actualgear -= 1
 		else:
 			if gear == 0:
-				 if gas:
-					  sassistdel -= 1
-					  if sassistdel<0:
-						  actualgear = 1
-				 elif brake:
-					  sassistdel -= 1
-					  if sassistdel<0:
-						  actualgear = -1
-				 else:
-					  sassistdel = 60
+				if gas:
+					sassistdel -= 1
+					if sassistdel<0:
+						actualgear = 1
+				elif brake:
+					sassistdel -= 1
+					if sassistdel<0:
+						actualgear = -1
+				else:
+					sassistdel = 60
 			elif linear_velocity.length()<5:
 				if not gas and gear == 1 or not brake and gear == -1:
 					sassistdel = 60
@@ -724,12 +724,12 @@ func transmission():
 		var a = CVTSettings[4]/((abs(wv)/10.0)*cvtaccel +1.0)
 		
 		if a<CVTSettings[5]:
-			 a = CVTSettings[5]
+			a = CVTSettings[5]
 
 		ratio = (CVTSettings[2]*10000000.0)/(abs(wv)*(rpm*a) +1.0)
 		
 		if ratio>CVTSettings[3]:
-			 ratio = CVTSettings[3]
+			ratio = CVTSettings[3]
 
 	elif TransmissionType == 3:
 		clutchpedal = (rpm- float(AutoSettings[3])*(gaspedal*float(AutoSettings[2]) +(1.0-float(AutoSettings[2]))) )/float(AutoSettings[4])
@@ -752,16 +752,16 @@ func transmission():
 			var assistshiftspeed = (GearAssistant[4]/ratio)*GearAssistant[2]
 			var assistdownshiftspeed = (GearAssistant[3]/abs((GearRatios[gear-2]*FinalDriveRatio)*RatioMult))*GearAssistant[2]
 			if gear == 0:
-				 if gas:
-					  sassistdel -= 1
-					  if sassistdel<0:
-						  actualgear = 1
-				 elif brake:
-					  sassistdel -= 1
-					  if sassistdel<0:
-						  actualgear = -1
-				 else:
-					  sassistdel = 60
+				if gas:
+					sassistdel -= 1
+					if sassistdel<0:
+						actualgear = 1
+				elif brake:
+					sassistdel -= 1
+					if sassistdel<0:
+						actualgear = -1
+				else:
+					sassistdel = 60
 			elif linear_velocity.length()<5:
 				if not gas and gear == 1 or not brake and gear == -1:
 					sassistdel = 60
@@ -894,26 +894,33 @@ func aero():
 	var drag = DragCoefficient
 	var df = Downforce
 	
-	var veloc = global_transform.basis.orthonormalized().xform_inv(linear_velocity)
+#	var veloc = global_transform.basis.orthonormalized().xform_inv(linear_velocity)
+	var veloc = global_transform.basis.orthonormalized().transposed() * (linear_velocity)
 	
-	var torq = global_transform.basis.orthonormalized().xform_inv(Vector3(1,0,0))
+#	var torq = global_transform.basis.orthonormalized().xform_inv(Vector3(1,0,0))
+	var torq = global_transform.basis.orthonormalized().transposed() * (Vector3(1,0,0))
 	
-	apply_torque_impulse(global_transform.basis.orthonormalized().xform( Vector3(((-veloc.length()*0.3)*LiftAngle),0,0)  ) )
+#	apply_torque_impulse(global_transform.basis.orthonormalized().xform( Vector3(((-veloc.length()*0.3)*LiftAngle),0,0)  ) )
+	apply_torque_impulse(global_transform.basis.orthonormalized() * ( Vector3(((-veloc.length()*0.3)*LiftAngle),0,0)  ) )
 	
 	var vx = veloc.x*0.15
 	var vy = veloc.z*0.15
 	var vz = veloc.y*0.15
 	var vl = veloc.length()*0.15
-			
-	var forc = global_transform.basis.orthonormalized().xform(Vector3(1,0,0))*(-vx*drag)
-	forc += global_transform.basis.orthonormalized().xform(Vector3(0,0,1))*(-vy*drag)
-	forc += global_transform.basis.orthonormalized().xform(Vector3(0,1,0))*(-vl*df -vz*drag)
+	
+#	var forc = global_transform.basis.orthonormalized().xform(Vector3(1,0,0))*(-vx*drag)
+	var forc = global_transform.basis.orthonormalized() * (Vector3(1,0,0))*(-vx*drag)
+#	forc += global_transform.basis.orthonormalized().xform(Vector3(0,0,1))*(-vy*drag)
+	forc += global_transform.basis.orthonormalized() * (Vector3(0,0,1))*(-vy*drag)
+#	forc += global_transform.basis.orthonormalized().xform(Vector3(0,1,0))*(-vl*df -vz*drag)
+	forc += global_transform.basis.orthonormalized() * (Vector3(0,1,0))*(-vl*df -vz*drag)
 	
 	if has_node("DRAG_CENTRE"):
-		apply_impulse(global_transform.basis.orthonormalized().xform($DRAG_CENTRE.translation),forc)
+#		apply_impulse(global_transform.basis.orthonormalized().xform($DRAG_CENTRE.position),forc)
+		apply_impulse(forc, global_transform.basis.orthonormalized() * ($DRAG_CENTRE.position))
 	else:
 		apply_central_impulse(forc)
-			
+		
 
 func _physics_process(delta):
 	
@@ -947,8 +954,10 @@ func _physics_process(delta):
 		else:
 			Debug_Mode = true
 	
-	velocity = global_transform.basis.orthonormalized().xform_inv(linear_velocity)
-	rvelocity = global_transform.basis.orthonormalized().xform_inv(angular_velocity)
+#	velocity = global_transform.basis.orthonormalized().xform_inv(linear_velocity)
+	velocity = global_transform.basis.orthonormalized().transposed() * (linear_velocity)
+#	rvelocity = global_transform.basis.orthonormalized().xform_inv(angular_velocity)
+	rvelocity = global_transform.basis.orthonormalized().transposed() * (angular_velocity)
 
 	if not mass == Weight/10.0:
 		mass = Weight/10.0
@@ -957,7 +966,8 @@ func _physics_process(delta):
 	gforce = (linear_velocity - pastvelocity)*((0.30592/9.806)*60.0)
 	pastvelocity = linear_velocity
 	
-	gforce = global_transform.basis.orthonormalized().xform_inv(gforce)
+#	gforce = global_transform.basis.orthonormalized().xform_inv(gforce)
+	gforce = global_transform.basis.orthonormalized().transposed() * (gforce)
 	
 	controls()
 
@@ -1024,7 +1034,7 @@ func _physics_process(delta):
 			boosting = thr
 		else:
 			boosting -= (boosting - thr)*TurboEfficiency
-		 
+		
 		turbopsi += (boosting*rpm)/((TurboSize/Compressor)*60.9)
 
 		turbopsi -= turbopsi*BlowoffRate
@@ -1038,9 +1048,9 @@ func _physics_process(delta):
 		scrpm = rpm*SCRPMInfluence
 		turbopsi = (scrpm/10000.0)*BlowRate -SCThreshold
 		if turbopsi>MaxPSI:
-			 turbopsi = MaxPSI
+			turbopsi = MaxPSI
 		if turbopsi<0.0:
-			 turbopsi = 0.0
+			turbopsi = 0.0
 	else:
 		turbopsi = 0.0
 
@@ -1098,7 +1108,7 @@ func _process(delta):
 		rear_wheels = []
 		for i in get_children():
 			if "TyreSettings" in i:
-				if i.translation.z>0:
+				if i.position.z>0:
 					front_wheels.append(i)
 				else:
 					rear_wheels.append(i)

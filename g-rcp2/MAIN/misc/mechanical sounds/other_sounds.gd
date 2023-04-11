@@ -1,34 +1,34 @@
-extends Spatial
+extends Node3D
 
-export var backfire_FuelRichness = 0.2
-export var backfire_FuelDecay = 0.1
-export var backfire_Air = 0.02
-export var backfire_BackfirePrevention = 0.1
-export var backfire_BackfireThreshold = 1.0
-export var backfire_BackfireRate = 1.0
-export var backfire_Volume = 0.5
+@export var backfire_FuelRichness = 0.2
+@export var backfire_FuelDecay = 0.1
+@export var backfire_Air = 0.02
+@export var backfire_BackfirePrevention = 0.1
+@export var backfire_BackfireThreshold = 1.0
+@export var backfire_BackfireRate = 1.0
+@export var backfire_Volume = 0.5
 
 
-export var WhinePitch = 4
-export var WhineVolume = 0.4
+@export var WhinePitch = 4
+@export var WhineVolume = 0.4
  
-export var BlowOffBounceSpeed = 0.0
-export var BlowOffWhineReduction = 1.0
-export var BlowDamping = 0.25
-export var BlowOffVolume = 0.5
-export var BlowOffVolume2 = 0.5
-export var BlowOffPitch1 = 0.5
-export var BlowOffPitch2 = 1.0
-export var MaxWhinePitch = 1.8
-export var SpoolVolume = 0.5
-export var SpoolPitch = 0.5
-export var BlowPitch = 1.0
-export var TurboNoiseRPMAffection = 0.25
+@export var BlowOffBounceSpeed = 0.0
+@export var BlowOffWhineReduction = 1.0
+@export var BlowDamping = 0.25
+@export var BlowOffVolume = 0.5
+@export var BlowOffVolume2 = 0.5
+@export var BlowOffPitch1 = 0.5
+@export var BlowOffPitch2 = 1.0
+@export var MaxWhinePitch = 1.8
+@export var SpoolVolume = 0.5
+@export var SpoolPitch = 0.5
+@export var BlowPitch = 1.0
+@export var TurboNoiseRPMAffection = 0.25
 
-export var engine_sound = NodePath("../engine_sound")
-export(Array,NodePath) var exhaust_particles = []
+@export var engine_sound = NodePath("../engine_sound")
+@export var exhaust_particles :Array[NodePath] = []
 
-export var volume = 0.25
+@export var volume = 0.25
 var blow_psi = 0.0
 var blow_inertia = 0.0
 
@@ -72,7 +72,7 @@ func _physics_process(delta):
 		get_node(engine_sound).pitch_influence -= (get_node(engine_sound).pitch_influence - 1.0)*0.5
 
 	if get_parent().rpm>get_parent().DeadRPM:
-		if fueltrace>rand_range(air*backfire_BackfirePrevention +backfire_BackfireThreshold,60.0/backfire_BackfireRate):
+		if fueltrace>randf_range(air*backfire_BackfirePrevention +backfire_BackfireThreshold,60.0/backfire_BackfireRate):
 			rand = 0.1
 			var ft = fueltrace
 			if ft<10:
@@ -81,9 +81,9 @@ func _physics_process(delta):
 			var yed = 1.5-ft*0.1
 			if yed<1.0:
 				yed = 1.0
-			$backfire.pitch_scale = rand_range(yed*1.25,yed*1.5)
-			$backfire.unit_db = linear2db((ft*backfire_Volume)*0.1)
-			$backfire.max_db = $backfire.unit_db
+			$backfire.pitch_scale = randf_range(yed*1.25,yed*1.5)
+			$backfire.volume_db = linear_to_db((ft*backfire_Volume)*0.1)
+			$backfire.max_db = $backfire.volume_db
 			get_node(engine_sound).pitch_influence = 0.5
 			for i in exhaust_particles:
 				get_node(i).emitting = true
@@ -97,11 +97,11 @@ func _physics_process(delta):
 	if wh<0.0:
 		wh = 0.0
 	if wh>0.01:
-		$scwhine.unit_db = linear2db(WhineVolume*volume)
-		$scwhine.max_db = $scwhine.unit_db
+		$scwhine.volume_db = linear_to_db(WhineVolume*volume)
+		$scwhine.max_db = $scwhine.volume_db
 		$scwhine.pitch_scale = wh
 	else:
-		$scwhine.unit_db = linear2db(0.0)
+		$scwhine.volume_db = linear_to_db(0.0)
 
 
 	var dist = blow_psi - get_parent().turbopsi
@@ -130,28 +130,28 @@ func _physics_process(delta):
 
 	
 
-	var blow = linear2db(volume*(blowvol*BlowOffVolume2))
+	var blow = linear_to_db(volume*(blowvol*BlowOffVolume2))
 	if blow<-60.0:
 		blow = -60.0
-	var spool = linear2db(volume*(spoolvol*SpoolVolume))
+	var spool = linear_to_db(volume*(spoolvol*SpoolVolume))
 	if spool<-60.0:
 		spool = -60.0
 
-	$blow.unit_db = blow
-	$spool.unit_db = spool
+	$blow.volume_db = blow
+	$spool.volume_db = spool
 	
-	$blow.max_db = $blow.unit_db
-	$spool.max_db = $spool.unit_db
+	$blow.max_db = $blow.volume_db
+	$spool.max_db = $spool.volume_db
 	var yes = blowvol*BlowOffVolume
 	if yes>1.0:
 		yes = 1.0
 	elif yes<0.0:
 		yes = 0.0
-	var whistle = linear2db(yes)
+	var whistle = linear_to_db(yes)
 	if whistle<-60.0:
 		whistle = -60.0
-	$whistle.unit_db = whistle
-	$whistle.max_db = $whistle.unit_db
+	$whistle.volume_db = whistle
+	$whistle.max_db = $whistle.volume_db
 	var wps = 1.0
 	if get_parent().turbopsi>0.0:
 		wps = blowvol*BlowOffPitch2 +get_parent().turbopsi*0.05 +BlowOffPitch1
@@ -170,18 +170,18 @@ func _physics_process(delta):
 	elif h<0.5:
 		h = 0.5
 		
-	var wlow = linear2db(((get_parent().gearstress*get_parent().GearGap)/160000.0)*((1.0-h)*0.5))
+	var wlow = linear_to_db(((get_parent().gearstress*get_parent().GearGap)/160000.0)*((1.0-h)*0.5))
 	if wlow<-60.0:
 		wlow = -60.0
-	$wlow.unit_db = wlow
-	$wlow.max_db = $wlow.unit_db
+	$wlow.volume_db = wlow
+	$wlow.max_db = $wlow.volume_db
 	if get_parent().whinepitch/50.0>0.0001:
 		$wlow.pitch_scale = get_parent().whinepitch/50.0
-	var whigh = linear2db(((get_parent().gearstress*get_parent().GearGap)/80000.0)*0.5)
+	var whigh = linear_to_db(((get_parent().gearstress*get_parent().GearGap)/80000.0)*0.5)
 	if whigh<-60.0:
 		whigh = -60.0
-	$whigh.unit_db = whigh
-	$whigh.max_db = $whigh.unit_db
+	$whigh.volume_db = whigh
+	$whigh.max_db = $whigh.volume_db
 	if get_parent().whinepitch/100.0>0.0001:
 		$whigh.pitch_scale = get_parent().whinepitch/100.0
 

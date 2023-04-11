@@ -1,4 +1,4 @@
-tool
+@tool
 extends Control
 var engine_enabled = false
 
@@ -46,8 +46,8 @@ func refresh():
 var changed_graph_size = Vector2(0.0,0.0)
 
 func _process(delta):
-	if not changed_graph_size == $Engine_Tuner/power_graph.rect_size and engine_enabled:
-		changed_graph_size = $Engine_Tuner/power_graph.rect_size
+	if not changed_graph_size == $Engine_Tuner/power_graph.size and engine_enabled:
+		changed_graph_size = $Engine_Tuner/power_graph.size
 		$Engine_Tuner/power_graph.draw_()
 
 	if engine_enabled:
@@ -65,16 +65,16 @@ var nods_buffer = []
 
 func press(state):
 	$Engine_Tuner/alert.dialog_text = ""
-	$Engine_Tuner/alert.rect_position.y = rect_size.y/2.0 +$Engine_Tuner/alert.rect_size.y/2.0
-	$Engine_Tuner/alert.rect_size = Vector2(83,58)
+	$Engine_Tuner/alert.position.y = size.y/2.0 +$Engine_Tuner/alert.size.y/2.0
+	$Engine_Tuner/alert.size = Vector2(83,58)
 
 	$Engine_Tuner/confirm.dialog_text = ""
-	$Engine_Tuner/confirm.rect_position.y = rect_size.y/2.0 +$Engine_Tuner/confirm.rect_size.y/2.0
-	$Engine_Tuner/confirm.rect_size = Vector2(83,58)
+	$Engine_Tuner/confirm.position.y = size.y/2.0 +$Engine_Tuner/confirm.size.y/2.0
+	$Engine_Tuner/confirm.size = Vector2(83,58)
 
 	$Engine_Tuner/confirm_append.dialog_text = ""
-	$Engine_Tuner/confirm_append.rect_position.y = rect_size.y/2.0 +$Engine_Tuner/confirm_append.rect_size.y/2.0
-	$Engine_Tuner/confirm_append.rect_size = Vector2(83,58)
+	$Engine_Tuner/confirm_append.position.y = size.y/2.0 +$Engine_Tuner/confirm_append.size.y/2.0
+	$Engine_Tuner/confirm_append.size = Vector2(83,58)
 
 	if state == "unit_tq":
 		$Engine_Tuner/power_graph.Torque_Unit += 1

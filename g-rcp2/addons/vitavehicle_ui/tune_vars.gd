@@ -1,3 +1,3 @@
 extends Node
 
-export var var_name = ""
+@export var var_name = ""

@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorPlugin
 
 const MainPanel = preload("res://addons/vitavehicle_ui/interface.tscn")
@@ -42,5 +42,6 @@ func get_plugin_icon():
 	return get_editor_interface().get_base_control().get_icon("Node", "EditorIcons")
 	
 func _unhandled_input(event):
-	if event is InputEventKey and event.pressed and event.scancode == KEY_BACKSLASH:
+#	if event is InputEventKey and event.pressed and event.scancode == KEY_BACKSLASH:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_BACKSLASH:
 		pass

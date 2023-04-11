@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 
 var length = 0.0
 var width = 0.0
@@ -9,7 +9,7 @@ var wheels = []
 
 func play():
 	for i in get_children():
-		i.unit_db = linear2db(0.0)
+		i.volume_db = linear_to_db(0.0)
 		i.play()
 		
 func stop():
@@ -87,8 +87,8 @@ func _physics_process(delta):
 	
 	for i in get_children():
 		if i.name == "dirt":
-			i.unit_db = linear2db(drit*0.3)
-			i.max_db = i.unit_db
+			i.volume_db = linear_to_db(drit*0.3)
+			i.max_db = i.volume_db
 			i.pitch_scale = 1.0 +length*0.05 +abs(roll/100.0)
 		else:
 			var dist = abs(i.length -length)
@@ -103,5 +103,5 @@ func _physics_process(delta):
 				vol = 0.0
 			elif vol>1.0:
 				vol = 1.0
-			i.unit_db = linear2db(((vol*(1.0-dirt))*i.volume)*0.35)
-			i.max_db = i.unit_db
+			i.volume_db = linear_to_db(((vol*(1.0-dirt))*i.volume)*0.35)
+			i.max_db = i.volume_db

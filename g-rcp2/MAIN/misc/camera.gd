@@ -1,13 +1,13 @@
-extends Position3D
+extends Marker3D
 
 var default_cam_pos
 var can_drag = false
 var just_resetted = false
 
 
-export var mobile_controls = NodePath()
-export var car = NodePath()
-export var debugger = NodePath()
+@export var mobile_controls = NodePath()
+@export var car = NodePath()
+@export var debugger = NodePath()
 
 var drag_velocity = Vector2(0,0)
 var last_pos = Vector2(0,0)
@@ -18,7 +18,7 @@ var resetdel = 0
 var default_zoom
 
 func _ready():
-	default_cam_pos = $orbit/Camera.translation
+	default_cam_pos = $orbit/Camera.position
 	default_zoom = default_cam_pos.z
 
 func _process(delta):
@@ -27,15 +27,15 @@ func _process(delta):
 	if has_node(car):
 		
 		if get_node(car).has_node("CAMERA_CENTRE"):
-			look_at(get_node(car).get_node("CAMERA_CENTRE").global_translation,Vector3(0,1,0))
-			translation = get_node(car).get_node("CAMERA_CENTRE").global_translation
+			look_at(get_node(car).get_node("CAMERA_CENTRE").global_position,Vector3(0,1,0))
+			position = get_node(car).get_node("CAMERA_CENTRE").global_position
 		else:
-			look_at(get_node(car).translation,Vector3(0,1,0))
-			translation = get_node(car).translation
+			look_at(get_node(car).position,Vector3(0,1,0))
+			position = get_node(car).position
 		translate_object_local(Vector3(0,0,14.5))
 		
-		$orbit.global_translation = get_node(car).global_translation
-		$orbit/Camera.translation = default_cam_pos -$orbit.translation
+		$orbit.global_position = get_node(car).global_position
+		$orbit/Camera.position = default_cam_pos -$orbit.position
 		
 func _physics_process(delta):
 	
@@ -56,7 +56,7 @@ func _physics_process(delta):
 	resetdel -= 1
 		
 func _input(event):
-	if not mobile_controls == "":
+	if not str(mobile_controls) == "":
 		if get_node(mobile_controls).visible:
 			can_drag = true
 			for i in get_node(mobile_controls).get_children():

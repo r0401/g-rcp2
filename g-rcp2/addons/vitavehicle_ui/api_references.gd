@@ -1,13 +1,13 @@
-tool
+@tool
 extends VBoxContainer
 
 var generated = false
 
-onready var vari = $vari.duplicate()
-onready var desc = $desc.duplicate()
-onready var type = $type.duplicate()
-onready var cat1 = $category1.duplicate()
-onready var cat2 = $category2.duplicate()
+@onready var vari = $vari.duplicate()
+@onready var desc = $desc.duplicate()
+@onready var type = $type.duplicate()
+@onready var cat1 = $category1.duplicate()
+@onready var cat2 = $category2.duplicate()
 
 var controls = {
 	"Use_Global_Control_Settings": ["Applies all control settings globally. This also affects cars that were already spawned.",false],
@@ -54,10 +54,10 @@ var steering = {
 	"Steer_Radius": ["Minimum turning circle (measured in default unit scale).",0.0],
 }
 var dt = {
-	"Powered_Wheels": ["A set of wheels that are powered parented under the vehicle.",PoolStringArray()],
-	"DSWeight": ["Leave this.",PoolStringArray()],
+	"Powered_Wheels": ["A set of wheels that are powered parented under the vehicle.",PackedStringArray()],
+	"DSWeight": ["Leave this.",PackedStringArray()],
 	"FinalDriveRatio": ['"Final Drive Ratio refers to the last set of gears that connect a vehicle%ss engine to the driving axle."' % "'",0.0],
-	"GearRatios": ['A set of gears a vehicle%ss transmission has in order. "A gear ratio is the ratio of the number of rotations of a driver gear to the number of rotations of a driven gear."' % "'",PoolRealArray()],
+	"GearRatios": ['A set of gears a vehicle%ss transmission has in order. "A gear ratio is the ratio of the number of rotations of a driver gear to the number of rotations of a driven gear."' % "'",PackedFloat32Array()],
 	"ReverseRatio": ["The reversed equivalent to GearRatios, only containing one gear.",0.0],
 	"RatioMult": ["Similar to FinalDriveRatio, but this should not relate to any real-life data. You may keep the value as it is.",0.0],
 	"StressFactor": ["The amount of stress put into the transmission (as in accelerating or decelerating) to restrict clutchless gear shifting.",0.0],
@@ -205,7 +205,7 @@ var tyreset = {
 	"Rim Size (in)": ["", 0.0],
 }
 
-func type(n):
+func _type(n):
 	var builtin_type_names = ["nil", "bool", "int", "float", "string", "vector2", "rect2", "vector3", "maxtrix32", "plane", "quat", "aabb",  "matrix3", "transform", "color", "image", "nodepath", "rid", null, "array", "dictionary", "array", "floatarray", "stringarray", "realarray", "stringarray", "vector2array", "vector3array", "colorarray", "unknown"]
 
 	return builtin_type_names[n]
@@ -230,7 +230,7 @@ func add(categ,catname,descr):
 		d.text = "\n" +str(categ[i][0]) +str("\n")
 		var t = type.duplicate()
 		add_child(t)
-		t.text = "Type: "+str(type( typeof(categ[i][1]) )) +str("\n")
+		t.text = "Type: "+str(_type( typeof(categ[i][1]) )) +str("\n")
 		v.default_text = i
 		v.nodes = [d,t]
 		v.visible = false

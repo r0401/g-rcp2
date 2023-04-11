@@ -1,4 +1,4 @@
-tool
+@tool
 extends Node
 
 var misc_smoke = true
@@ -43,12 +43,12 @@ func multivariate(RiseRPM,TorqueRise,BuildUpTorque,EngineFriction,EngineDrag,Off
 		scrpm = RPM*SCRPMInfluence
 		PSI = (scrpm/10000.0)*BlowRate -SCThreshold
 		if PSI>maxpsi:
-			 PSI = maxpsi
+			PSI = maxpsi
 		if PSI<0.0:
-			 PSI = 0.0
-	 
+			PSI = 0.0
+	
 	if not SCEnabled and not TEnabled:
-		 PSI = 0.0
+		PSI = 0.0
 
 	if RPM>VVTRPM:
 		value = (RPM*VVT_BuildUpTorque +VVT_OffsetTorque) + ( (PSI*TurboAmount) * (EngineCompressionRatio*0.609) )
@@ -113,16 +113,17 @@ func alignAxisToVector(xform, norm): # i named this literally out of blender
 
 
 func suspension(own,maxcompression,incline_free,incline_impact,rest,      elasticity,damping,damping_rebound     ,linearz,g_range,located,hit_located,weight,ground_bump,ground_bump_height):
-	own.get_node("geometry").global_translation = own.get_collision_point()
-	own.get_node("geometry").translation.y -= (ground_bump*ground_bump_height)
-	if own.get_node("geometry").translation.y<-g_range:
-		own.get_node("geometry").translation.y = -g_range
+	own.get_node("geometry").global_position = own.get_collision_point()
+	own.get_node("geometry").position.y -= (ground_bump*ground_bump_height)
+	if own.get_node("geometry").position.y<-g_range:
+		own.get_node("geometry").position.y = -g_range
 	own.get_node("velocity").global_transform = alignAxisToVector(own.get_node("velocity").global_transform,own.get_collision_normal())
 	own.get_node("velocity2").global_transform = alignAxisToVector(own.get_node("velocity2").global_transform,own.get_collision_normal())
 
-	own.angle = (own.get_node("geometry").rotation_degrees.z -(-own.c_camber*float(own.translation.x>0.0) + own.c_camber*float(own.translation.x<0.0)) +(-own.cambered*float(own.translation.x>0.0) + own.cambered*float(own.translation.x<0.0))*own.A_Geometry2)/90.0
+	own.angle = (own.get_node("geometry").rotation_degrees.z -(-own.c_camber*float(own.position.x>0.0) + own.c_camber*float(own.position.x<0.0)) +(-own.cambered*float(own.position.x>0.0) + own.cambered*float(own.position.x<0.0))*own.A_Geometry2)/90.0
 
-	var incline = (own.get_collision_normal()-own.global_transform.basis.orthonormalized().xform(Vector3(0,1,0))).length()
+#	var incline = (own.get_collision_normal()-own.global_transform.basis.orthonormalized().xform(Vector3(0,1,0))).length()
+	var incline = (own.get_collision_normal()-(own.global_transform.basis.orthonormalized() * Vector3(0,1,0))).length()
 		
 	incline /= 1-incline_free
 	
@@ -136,12 +137,12 @@ func suspension(own,maxcompression,incline_free,incline_impact,rest,      elasti
 	if incline>1.0:
 		incline = 1.0
 
-	if own.get_node("geometry").translation.y>-g_range +maxcompression*(1.0-incline):
-		own.get_node("geometry").translation.y = -g_range +maxcompression*(1.0-incline)
+	if own.get_node("geometry").position.y>-g_range +maxcompression*(1.0-incline):
+		own.get_node("geometry").position.y = -g_range +maxcompression*(1.0-incline)
 
 	var damp_variant = damping_rebound
 	if linearz<0:
-		 damp_variant = damping
+		damp_variant = damping
 
 	var compressed = g_range -(located - hit_located).length() - (ground_bump*ground_bump_height)
 	var compressed2 = g_range -(located - hit_located).length() - (ground_bump*ground_bump_height)
@@ -150,10 +151,10 @@ func suspension(own,maxcompression,incline_free,incline_impact,rest,      elasti
 	var j = compressed-rest
 	
 	if j<0.0:
-		 j = 0.0
+		j = 0.0
 
 	if compressed2<0.0:
-		 compressed2 = 0.0
+		compressed2 = 0.0
 
 	var elasticity2 = elasticity*(1.0-incline) + (weight)*incline
 	var damping2 = damp_variant*(1.0-incline) + (weight/10.0)*incline

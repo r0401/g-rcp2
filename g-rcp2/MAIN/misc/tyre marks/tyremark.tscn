@@ -1,9 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://bhq2f4bxcu25j"]
 
-[ext_resource path="res://MAIN/misc/tyre marks/trail_clean.gd" type="Script" id=1]
-[ext_resource path="res://MAIN/misc/tyre marks/trail_sm.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://MAIN/misc/tyre marks/trail_clean.gd" id="1"]
+[ext_resource type="Script" path="res://MAIN/misc/tyre marks/trail_sm.gd" id="2"]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id="1"]
 code = "// NOTE: Shader automatically converted from Godot Engine 3.5.1.stable's SpatialMaterial.
 
 shader_type spatial;
@@ -18,16 +18,18 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id="2"]
 render_priority = -128
-shader = SubResource( 1 )
-shader_param/albedo = Color( 0, 0, 0, 0.478431 )
+shader = SubResource("1")
 
-[node name="tyremark" type="Spatial"]
-script = ExtResource( 2 )
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_msyhp"]
 
-[node name="trail" type="ImmediateGeometry" parent="."]
-material_override = SubResource( 2 )
-script = ExtResource( 1 )
+[node name="tyremark" type="Node3D"]
+script = ExtResource("2")
 
-[node name="point" type="Position3D" parent="."]
+[node name="trail" type="MeshInstance3D" parent="."]
+material_override = SubResource("2")
+mesh = SubResource("ImmediateMesh_msyhp")
+script = ExtResource("1")
+
+[node name="point" type="Marker3D" parent="."]
