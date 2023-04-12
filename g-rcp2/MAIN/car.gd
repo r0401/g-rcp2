@@ -928,7 +928,7 @@ func _physics_process(delta):
 	if len(steering_angles)>0:
 		max_steering_angle = 0.0
 		for i in steering_angles:
-			max_steering_angle = max(max_steering_angle,i)
+			max_steering_angle = maxf(max_steering_angle,i)
 			
 		assistance_factor = 90.0/max_steering_angle
 	steering_angles = []

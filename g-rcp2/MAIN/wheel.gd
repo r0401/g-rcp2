@@ -177,37 +177,24 @@ func _physics_process(_delta):
 		var form1 :float = 0.0
 		var form2 :float = car.steering_geometry[1] -translation.x
 		var the
-		
-		
 		var lasttransform = global_transform
-		var steerr :float = car.steer
-		var degtorad :float = deg_to_rad(90.0)
 		
-#		var steerr = 1
-		print(global_rotation)
 		look_at_from_position(translation,Vector3(car.steering_geometry[0],0.0,car.steering_geometry[1]))
-		# ^ the issue starts from here i believe
-		# maybe its like a race condition or whatever its called?
-		# you can sort of replicate this bug in the original godot 3 version 
-		# by simply typing global_rotation like here :
-#		global_rotation
 		
-		global_transform = lasttransform
-		print(global_rotation)
+		# just making this use origin fixed it. lol
+		global_transform.origin = lasttransform.origin
+#		global_transform = lasttransform
 		
-		if steerr > 0.0 :
-			
-			rotate_object_local(Vector3(0,1,0),-degtorad)
-			print(global_rotation)
-			
+		if car.steer > 0.0 :
+			rotate_object_local(Vector3(0,1,0),-deg_to_rad(90.0))
 		else:
-			rotate_object_local(Vector3(0,1,0),degtorad)
+			rotate_object_local(Vector3(0,1,0),deg_to_rad(90.0))
 		
 		var roter = global_rotation.y
-		print(car.steer)
 		
 		look_at_from_position(translation,Vector3(car.Steer_Radius,0,car.steering_geometry[1]),Vector3(0,1,0))
-		global_transform = lasttransform
+		# this one too
+		global_transform.origin = lasttransform.origin
 		rotate_object_local(Vector3(0,1,0),deg_to_rad(90.0))
 		var roter_estimateed = rad_to_deg(global_rotation.y)
 		
@@ -217,7 +204,6 @@ func _physics_process(_delta):
 		rotation = Vector3(0,0,0)
 		
 		rotation.y = roter
-#		rotation.y = 1
 		
 		rotation_degrees += Vector3(0,-((Toe*(float(translation.x>0)) -Toe*float(translation.x<0))),0)
 	else:
