@@ -15,8 +15,10 @@ static func set_canvas_item_light_mask_value(canvas_item: CanvasItem, layer_numb
 		canvas_item.light_mask &= ~(1 << (layer_number - 1))
 
 func _enter_tree():
-	main_panel_instance = MainPanel.instance()
-	get_editor_interface().get_editor_viewport().add_child(main_panel_instance)
+	main_panel_instance = MainPanel.instantiate()
+	
+	get_editor_interface().get_editor_main_screen().add_child(main_panel_instance)
+	
 	make_visible(false)
 
 
@@ -39,8 +41,8 @@ func get_plugin_name():
 
 func get_plugin_icon():
 	# Must return some kind of Texture for the icon.
-	return get_editor_interface().get_base_control().get_icon("Node", "EditorIcons")
-	
+	return get_editor_interface().get_base_control().get_theme_icon("Node", "EditorIcons")
+
 func _unhandled_input(event):
 #	if event is InputEventKey and event.pressed and event.scancode == KEY_BACKSLASH:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_BACKSLASH:

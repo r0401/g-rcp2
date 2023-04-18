@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctggu2i2uiplr"
-path.s3tc="res://.godot/imported/smoke.png-05c97b0f6ec6a08f3819f01fee5f4408.s3tc.ctex"
+uid="uid://duss7qfht17f4"
+path.bptc="res://.godot/imported/sphere_normals2.png-b95a11fc0ebfe847bcfbcdf8ba35923e.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,17 +11,17 @@ metadata={
 
 [deps]
 
-source_file="res://MAIN/misc/tyre smoke/smoke.png"
-dest_files=["res://.godot/imported/smoke.png-05c97b0f6ec6a08f3819f01fee5f4408.s3tc.ctex"]
+source_file="res://MAIN/misc/tyre smoke/sphere_normals2.png"
+dest_files=["res://.godot/imported/sphere_normals2.png-b95a11fc0ebfe847bcfbcdf8ba35923e.bptc.ctex"]
 
 [params]
 
 compress/mode=2
-compress/high_quality=false
+compress/high_quality=true
 compress/lossy_quality=0.7
-compress/hdr_compression=1
-compress/normal_map=2
-compress/channel_pack=0
+compress/hdr_compression=0
+compress/normal_map=1
+compress/channel_pack=1
 mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0

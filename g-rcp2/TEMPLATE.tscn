@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://5gbiq3mlwmse"]
+[gd_scene load_steps=10 format=3 uid="uid://5gbiq3mlwmse"]
 
 [ext_resource type="PackedScene" uid="uid://crtwme8ggggra" path="res://base car.tscn" id="1"]
 [ext_resource type="Script" path="res://MAIN/misc/camera.gd" id="2"]
 [ext_resource type="Script" path="res://MAIN/ground_surface_variables.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://lhxyg0uvrnb5" path="res://Grid.png" id="4"]
 [ext_resource type="Environment" uid="uid://cyj6nkuho8mdy" path="res://day_env.tres" id="4_sofk1"]
 
 [sub_resource type="ConcavePolygonShape3D" id="5"]
@@ -12,9 +13,10 @@ data = PackedVector3Array(96, 0, 123, 34, 12.4, 82.7, 96, 12.4, 82.7, 34, 0, 82.
 code = "// NOTE: Shader automatically converted from Godot Engine 3.5.1.stable's SpatialMaterial.
 
 shader_type spatial;
-render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
-uniform vec4 albedo : hint_color;
-uniform sampler2D texture_albedo : hint_albedo;
+//render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : hint_default_white;
 uniform float specular;
 uniform float metallic;
 uniform float roughness : hint_range(0,1);
@@ -46,6 +48,16 @@ void fragment() {
 resource_name = "Material.001"
 render_priority = 0
 shader = SubResource("7")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.5
+shader_parameter/point_size = 1.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = ExtResource("4")
 
 [sub_resource type="ArrayMesh" id="9"]
 _surfaces = [{
@@ -66,7 +78,6 @@ _surfaces = [{
 [node name="cam_chase" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
 script = ExtResource("2")
-car = NodePath("../car")
 
 [node name="orbit" type="Marker3D" parent="cam_chase"]
 
@@ -105,7 +116,6 @@ shape = SubResource("5")
 
 [node name="map" type="MeshInstance3D" parent="test scene"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0)
-cast_shadow = 2
 mesh = SubResource("9")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

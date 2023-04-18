@@ -183,7 +183,6 @@ func _physics_process(_delta):
 		
 		# just making this use origin fixed it. lol
 		global_transform.origin = lasttransform.origin
-#		global_transform = lasttransform
 		
 		if car.steer > 0.0 :
 			rotate_object_local(Vector3(0,1,0),-deg_to_rad(90.0))
@@ -216,7 +215,7 @@ func _physics_process(_delta):
 	directional_force = Vector3(0,0,0)
 	
 	$velocity.position = Vector3(0,0,0)
-
+	
 	
 	w_size = ((abs(int(TyreSettings["Width (mm)"]))*((abs(int(TyreSettings["Aspect Ratio"]))*2.0)/100.0) + abs(int(TyreSettings["Rim Size (in)"]))*25.4)*0.003269)/2.0
 	w_weight = pow(w_size,2.0)
@@ -247,7 +246,7 @@ func _physics_process(_delta):
 	
 	var swaystiff = AR_Stiff
 	var swayelast = AR_Elast
-
+	
 	var s = rolldist
 	if s<-1.0:
 		s = -1.0
@@ -257,7 +256,7 @@ func _physics_process(_delta):
 	elasticity *= swayelast*s +1.0
 	damping *= swaystiff*s +1.0
 	damping_rebound *= swaystiff*s +1.0
-
+	
 	if elasticity<0.0:
 		elasticity = 0.0
 		

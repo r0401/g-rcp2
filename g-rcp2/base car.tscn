@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://crtwme8ggggra"]
+[gd_scene load_steps=17 format=3 uid="uid://crtwme8ggggra"]
 
 [ext_resource type="PackedScene" uid="uid://df2i30irlljkl" path="res://MAIN/wheel.tscn" id="1"]
 [ext_resource type="Script" path="res://MAIN/car.gd" id="2"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d1vmrvs3aj84o" path="res://MAIN/misc/tyre sounds/tyres.tscn" id="5"]
 [ext_resource type="PackedScene" path="res://MAIN/misc/mechanical sounds/other_sounds.tscn" id="6"]
 [ext_resource type="PackedScene" path="res://MAIN/misc/backfire_particles/fire.tscn" id="7"]
+[ext_resource type="Texture2D" uid="uid://1a0k3s3amej8" path="res://MAIN/misc/backfire_particles/backfire.png" id="8_tk2wk"]
 
 [sub_resource type="ConvexPolygonShape3D" id="12"]
 points = PackedVector3Array(2.75605, 1.27715, 6.68259, 1.75444, 2.13382, 3.26614, -2.75659, 1.27715, 6.68259, 2.75605, -0.4, 6.68259, 2.75605, 0.921974, -4.96708, 1.75444, 2.13382, -0.149161, -1.75498, 2.13382, 3.26614, -2.75659, -0.4, 6.68259, -1.75498, 2.13382, -0.149161, -2.75659, 0.921974, -4.96708, 2.75605, -0.4, -4.96708, -2.75659, -0.4, -4.96708)
@@ -146,17 +147,17 @@ blend_shape_mode = 0
 code = "// NOTE: Shader automatically converted from Godot Engine 3.5.1.stable's SpatialMaterial.
 
 shader_type spatial;
-render_mode async_visible,blend_mix,unshaded,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
-uniform vec4 albedo : hint_color;
-uniform sampler2D texture_albedo : hint_albedo;
+render_mode blend_mix,unshaded,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : hint_default_white;
 uniform int particles_anim_h_frames;
 uniform int particles_anim_v_frames;
 uniform bool particles_anim_loop;
 
 void vertex() {
-	mat4 mat_world = mat4(normalize(CAMERA_MATRIX[0])*length(WORLD_MATRIX[0]),normalize(CAMERA_MATRIX[1])*length(WORLD_MATRIX[0]),normalize(CAMERA_MATRIX[2])*length(WORLD_MATRIX[2]),WORLD_MATRIX[3]);
+	mat4 mat_world = mat4(normalize(INV_VIEW_MATRIX[0])*length(MODEL_MATRIX[0]),normalize(INV_VIEW_MATRIX[1])*length(MODEL_MATRIX[0]),normalize(INV_VIEW_MATRIX[2])*length(MODEL_MATRIX[2]),MODEL_MATRIX[3]);
 	mat_world = mat_world * mat4( vec4(cos(INSTANCE_CUSTOM.x),-sin(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(sin(INSTANCE_CUSTOM.x), cos(INSTANCE_CUSTOM.x), 0.0, 0.0),vec4(0.0, 0.0, 1.0, 0.0),vec4(0.0, 0.0, 0.0, 1.0));
-	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat_world;
+	MODELVIEW_MATRIX = VIEW_MATRIX * mat_world;
 	float h_frames = float(particles_anim_h_frames);
 	float v_frames = float(particles_anim_v_frames);
 	float particle_total_frames = float(particles_anim_h_frames * particles_anim_v_frames);
@@ -187,6 +188,11 @@ void fragment() {
 resource_name = "None"
 render_priority = 0
 shader = SubResource("8")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/particles_anim_h_frames = 1
+shader_parameter/particles_anim_v_frames = 1
+shader_parameter/particles_anim_loop = false
+shader_parameter/texture_albedo = ExtResource("8_tk2wk")
 
 [sub_resource type="ArrayMesh" id="13"]
 _surfaces = [{
@@ -225,6 +231,7 @@ shape = SubResource("12")
 
 [node name="carmesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(-100, 1.50996e-05, 6.60024e-13, 0, -4.37114e-06, 100, 1.50996e-05, 100, 4.37114e-06, 0, -1.50209, 0)
+visible = false
 mesh = SubResource("10")
 
 [node name="fr" parent="." instance=ExtResource("1")]
@@ -292,7 +299,10 @@ exhaust_particles = Array[NodePath]([NodePath("../fire")])
 
 [node name="fire" parent="." instance=ExtResource("7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.21278, -1.65592, -5.90752)
+local_coords = true
 mesh = SubResource("13")
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
 scale_amount_curve = SubResource("14")
 
 [editable path="fr"]

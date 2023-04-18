@@ -14,24 +14,29 @@ var ran = false
 var inserting = false
 var inserting2 = false
 
-var current_trail_node = null
+var current_trail_node :MeshInstance3D = null
 var current_trail :ImmediateMesh = null
 var drawers = []
+
+
+# i spent 5 days trying to figure out why the skids were not working properly
+	# the immediate mesh resource was shared between all the skids :/
+	# ok i just do this on line 82
+
 
 func add_segment():
 	var ppos = global_transform
 	
 	vertices.append( [
 		
-#		ppos.origin + ppos.basis.orthonormalized().xform(Vector3(wid,0,0)),
 		ppos.origin + (ppos.basis.orthonormalized() * Vector3(wid,0,0)),
-#		ppos.origin - ppos.basis.orthonormalized().xform(Vector3(wid,0,0)),
 		ppos.origin - (ppos.basis.orthonormalized() * Vector3(wid,0,0)),
-
+		
 		ppos.origin,
 		] )
-
+	
 	last_pos = ppos
+
 
 func _physics_process(delta):
 	
@@ -51,6 +56,7 @@ func _physics_process(delta):
 		del = 5
 		add_segment()
 
+
 func _process(_delta):
 	
 	inserting = get_parent().get_parent().slip_perc.length()>get_parent().get_parent().stress +20.0 and get_parent().get_parent().is_colliding()
@@ -62,42 +68,52 @@ func _process(_delta):
 		inserting2 = inserting
 		if inserting2:
 			
-			if not current_trail == null:
-				var t = current_trail.global_transform
+			if not current_trail_node == null:
+				var t = current_trail_node.global_transform
 				remove_child(current_trail_node)
 				get_tree().get_current_scene().add_child(current_trail_node)
-				current_trail.global_transform = t
+				current_trail_node.global_transform = t
 			
 			vertices.clear()
 			current_trail_node = $trail.duplicate()
+			# we changed our node so we need to update our resource too.
+			# not sure if i should use new resource or use a copy of the old one
+			# but im not noticing any difference by using a new one, soo...
+			current_trail_node.mesh = ImmediateMesh.new()
+			current_trail = current_trail_node.mesh
+			
 			add_child(current_trail_node)
 			drawers.append(current_trail_node)
 		
 	
 	ran = true
-	if (global_transform.origin - g).length()>0.1:
+	if (global_transform.origin - g).length_squared()>0.01:
 		look_at(g,Vector3(0,1,0))
 		
 	g = global_transform.origin
 	var ppos = global_transform
 	
-	if not current_trail == null:
+	if not current_trail_node == null:
 		if inserting:
 			current_trail_node.delete_wait = 180
 			if len(vertices)>0:
-#				vertices[len(vertices)-1][0] = (ppos.origin + ppos.basis.orthonormalized().xform(Vector3(wid,0,0)))
 				vertices[len(vertices)-1][0] = ((ppos.origin + ppos.basis.orthonormalized() * Vector3(wid,0,0)))
-#				vertices[len(vertices)-1][1] = (ppos.origin - ppos.basis.orthonormalized().xform(Vector3(wid,0,0)))
 				vertices[len(vertices)-1][1] = ((ppos.origin - ppos.basis.orthonormalized() * Vector3(wid,0,0)))
 				vertices[len(vertices)-1][2] = ppos.origin
 			
 		current_trail_node.global_transform.basis = get_tree().get_current_scene().global_transform.basis
 		current_trail.clear_surfaces()
-		current_trail.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
-		for i in vertices:
-			if len(i)>0:
-				current_trail.surface_add_vertex(i[0] -global_transform.origin)
-				current_trail.surface_add_vertex(i[1] -global_transform.origin)
-			
-		current_trail.surface_end()
+		
+		if vertices.size() > 0 : # check if we actually got stuff to make
+			current_trail.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
+			for i in vertices:
+				if len(i)>0:
+					current_trail.surface_add_vertex(i[0] -global_transform.origin)
+					current_trail.surface_add_vertex(i[1] -global_transform.origin)
+				
+			current_trail.surface_end()
+
+
+
+
 

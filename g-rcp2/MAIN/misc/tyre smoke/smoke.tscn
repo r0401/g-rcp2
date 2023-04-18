@@ -1,14 +1,17 @@
-[gd_scene load_steps=11 format=3 uid="uid://q8oxthp1fyj5"]
+[gd_scene load_steps=13 format=3 uid="uid://q8oxthp1fyj5"]
 
 [ext_resource type="Script" path="res://MAIN/misc/tyre smoke/tyre_smoke.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ctggu2i2uiplr" path="res://MAIN/misc/tyre smoke/smoke.png" id="2_081ma"]
+[ext_resource type="Texture2D" uid="uid://bhnavtbeduelx" path="res://MAIN/misc/tyre smoke/sphere_normals.png" id="3_lelqg"]
 
 [sub_resource type="Shader" id="8"]
 code = "// NOTE: Shader automatically converted from Godot Engine 3.5.1.stable's SpatialMaterial.
 
 shader_type spatial;
-render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
-uniform vec4 albedo : hint_color;
-uniform sampler2D texture_albedo : hint_albedo;
+//render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : hint_default_white;
 uniform int particles_anim_h_frames;
 uniform int particles_anim_v_frames;
 uniform bool particles_anim_loop;
@@ -17,9 +20,9 @@ uniform float normal_scale : hint_range(-16,16);
 
 
 void vertex() {
-	mat4 mat_world = mat4(normalize(CAMERA_MATRIX[0])*length(WORLD_MATRIX[0]),normalize(CAMERA_MATRIX[1])*length(WORLD_MATRIX[0]),normalize(CAMERA_MATRIX[2])*length(WORLD_MATRIX[2]),WORLD_MATRIX[3]);
+	mat4 mat_world = mat4(normalize(INV_VIEW_MATRIX[0])*length(MODEL_MATRIX[0]),normalize(INV_VIEW_MATRIX[1])*length(MODEL_MATRIX[0]),normalize(INV_VIEW_MATRIX[2])*length(MODEL_MATRIX[2]),MODEL_MATRIX[3]);
 	mat_world = mat_world * mat4( vec4(cos(INSTANCE_CUSTOM.x),-sin(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(sin(INSTANCE_CUSTOM.x), cos(INSTANCE_CUSTOM.x), 0.0, 0.0),vec4(0.0, 0.0, 1.0, 0.0),vec4(0.0, 0.0, 0.0, 1.0));
-	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat_world;
+	MODELVIEW_MATRIX = VIEW_MATRIX * mat_world;
 	float h_frames = float(particles_anim_h_frames);
 	float v_frames = float(particles_anim_v_frames);
 	float particle_total_frames = float(particles_anim_h_frames * particles_anim_v_frames);
@@ -43,8 +46,8 @@ void fragment() {
 	METALLIC = 0.0;
 	ROUGHNESS = 1.0;
 	SPECULAR = 0.0;
-	NORMALMAP = texture(texture_normal,base_uv).rgb;
-	NORMALMAP_DEPTH = normal_scale;
+	NORMAL_MAP = texture(texture_normal,base_uv).rgb;
+	NORMAL_MAP_DEPTH = normal_scale;
 }
 "
 
@@ -52,6 +55,13 @@ void fragment() {
 resource_name = "None"
 render_priority = 0
 shader = SubResource("8")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/particles_anim_h_frames = 1
+shader_parameter/particles_anim_v_frames = 1
+shader_parameter/particles_anim_loop = false
+shader_parameter/normal_scale = 1.0
+shader_parameter/texture_albedo = ExtResource("2_081ma")
+shader_parameter/texture_normal = ExtResource("3_lelqg")
 
 [sub_resource type="ArrayMesh" id="10"]
 _surfaces = [{
@@ -74,7 +84,7 @@ point_count = 2
 
 [sub_resource type="Gradient" id="12"]
 offsets = PackedFloat32Array(0, 0.1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.05)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.0509804)
 
 [sub_resource type="Curve" id="13"]
 max_value = 25.0
@@ -107,8 +117,16 @@ mesh = SubResource("10")
 direction = Vector3(0, 0, -1)
 spread = 0.0
 gravity = Vector3(0, 0, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 20.0
+angular_velocity_min = 50.0
+angular_velocity_max = 50.0
+damping_min = 2.0
+damping_max = 2.0
+angle_min = -720.0
+angle_max = 720.0
 scale_amount_curve = SubResource("11")
-color = Color(1, 1, 1, 0.33)
+color = Color(1, 1, 1, 0.329412)
 color_ramp = SubResource("12")
 
 [node name="lvl2" type="CPUParticles3D" parent="static"]
@@ -119,8 +137,16 @@ mesh = SubResource("10")
 direction = Vector3(0, 0, -1)
 spread = 0.0
 gravity = Vector3(0, 0, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 20.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+damping_min = 2.0
+damping_max = 2.0
+angle_min = -720.0
+angle_max = 720.0
 scale_amount_curve = SubResource("13")
-color = Color(1, 1, 1, 0.7)
+color = Color(1, 1, 1, 0.701961)
 color_ramp = SubResource("12")
 
 [node name="lvl3" type="CPUParticles3D" parent="static"]
@@ -131,6 +157,14 @@ mesh = SubResource("10")
 direction = Vector3(0, 0, -1)
 spread = 0.0
 gravity = Vector3(0, 0, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 20.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+damping_min = 2.0
+damping_max = 2.0
+angle_min = -720.0
+angle_max = 720.0
 scale_amount_curve = SubResource("14")
 color_ramp = SubResource("12")
 
@@ -140,12 +174,24 @@ color_ramp = SubResource("12")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 emitting = false
 amount = 16
+local_coords = true
 mesh = SubResource("10")
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
+emission_shape = 4
+emission_points = PackedVector3Array(0, -1, 0)
+particle_flag_disable_z = true
 spread = 180.0
 flatness = 1.0
 gravity = Vector3(0, 0, 0)
+initial_velocity_max = 1.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+orbit_velocity_min = 0.5
+orbit_velocity_max = 1.0
+orbit_velocity_curve = null
+angle_min = -720.0
+angle_max = 720.0
+scale_amount_min = 0.0
+scale_amount_max = 0.5
 scale_amount_curve = SubResource("16")
 color = Color(1, 1, 1, 0.25)
 color_ramp = SubResource("15")
@@ -154,12 +200,23 @@ color_ramp = SubResource("15")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 emitting = false
 amount = 32
+local_coords = true
 mesh = SubResource("10")
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
+emission_shape = 4
+emission_points = PackedVector3Array(0, -1, 0)
+particle_flag_disable_z = true
 spread = 180.0
 flatness = 1.0
 gravity = Vector3(0, 0, 0)
+initial_velocity_max = 1.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+orbit_velocity_min = 0.5
+orbit_velocity_max = 1.0
+orbit_velocity_curve = null
+angle_min = -720.0
+angle_max = 720.0
+scale_amount_min = 0.0
 scale_amount_curve = SubResource("16")
 color = Color(1, 1, 1, 0.25)
 color_ramp = SubResource("15")
@@ -168,12 +225,23 @@ color_ramp = SubResource("15")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 emitting = false
 amount = 64
+local_coords = true
 mesh = SubResource("10")
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
+emission_shape = 4
+emission_points = PackedVector3Array(0, -1, 0)
+particle_flag_disable_z = true
 spread = 180.0
 flatness = 1.0
 gravity = Vector3(0, 0, 0)
+initial_velocity_max = 1.0
+angular_velocity_min = -50.0
+angular_velocity_max = 50.0
+orbit_velocity_min = 0.5
+orbit_velocity_max = 1.0
+orbit_velocity_curve = null
+angle_min = -720.0
+angle_max = 720.0
+scale_amount_min = 0.0
 scale_amount_curve = SubResource("16")
 color = Color(1, 1, 1, 0.25)
 color_ramp = SubResource("15")
@@ -184,12 +252,23 @@ color_ramp = SubResource("15")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 emitting = false
 amount = 16
+local_coords = true
 mesh = SubResource("10")
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
+emission_shape = 4
+emission_points = PackedVector3Array(0, -1, 0)
+particle_flag_disable_z = true
 spread = 180.0
 flatness = 1.0
 gravity = Vector3(0, 0, 0)
+initial_velocity_max = 1.0
+angular_velocity_max = 50.0
+orbit_velocity_min = 0.5
+orbit_velocity_max = 1.0
+orbit_velocity_curve = null
+angle_min = -720.0
+angle_max = 720.0
+scale_amount_min = 0.0
+scale_amount_max = 0.5
 scale_amount_curve = SubResource("16")
 color = Color(1, 1, 1, 0.25)
 color_ramp = SubResource("15")
@@ -198,12 +277,22 @@ color_ramp = SubResource("15")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 emitting = false
 amount = 32
+local_coords = true
 mesh = SubResource("10")
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
+emission_shape = 4
+emission_points = PackedVector3Array(0, -1, 0)
+particle_flag_disable_z = true
 spread = 180.0
 flatness = 1.0
 gravity = Vector3(0, 0, 0)
+initial_velocity_max = 1.0
+angular_velocity_max = 50.0
+orbit_velocity_min = 0.5
+orbit_velocity_max = 1.0
+orbit_velocity_curve = null
+angle_min = -720.0
+angle_max = 720.0
+scale_amount_min = 0.0
 scale_amount_curve = SubResource("16")
 color = Color(1, 1, 1, 0.25)
 color_ramp = SubResource("15")
@@ -212,12 +301,22 @@ color_ramp = SubResource("15")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 emitting = false
 amount = 64
+local_coords = true
 mesh = SubResource("10")
-emission_shape = 3
-emission_box_extents = Vector3(1, 1, 1)
+emission_shape = 4
+emission_points = PackedVector3Array(0, -1, 0)
+particle_flag_disable_z = true
 spread = 180.0
 flatness = 1.0
 gravity = Vector3(0, 0, 0)
+initial_velocity_max = 1.0
+angular_velocity_max = 50.0
+orbit_velocity_min = 0.5
+orbit_velocity_max = 1.0
+orbit_velocity_curve = null
+angle_min = -720.0
+angle_max = 720.0
+scale_amount_min = 0.0
 scale_amount_curve = SubResource("16")
 color = Color(1, 1, 1, 0.25)
 color_ramp = SubResource("15")

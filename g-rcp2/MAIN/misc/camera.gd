@@ -6,7 +6,7 @@ var just_resetted = false
 
 
 @export var mobile_controls = NodePath()
-@export var car = NodePath()
+@export var car :NodePath = NodePath("../car")
 @export var debugger = NodePath()
 
 var drag_velocity = Vector2(0,0)
