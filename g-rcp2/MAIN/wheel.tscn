@@ -13,6 +13,7 @@
 script = ExtResource("1")
 
 [node name="geometry" type="MeshInstance3D" parent="."]
+visible = false
 mesh = SubResource("1")
 script = ExtResource("3")
 

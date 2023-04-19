@@ -160,7 +160,7 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-renderer/rendering_method="gl_compatibility"
+environment/defaults/default_environment="res://default_env.tres"
 quality/driver/driver_name="GLES2"
 quality/intended_usage/framebuffer_allocation.mobile=2
 threads/thread_model=2

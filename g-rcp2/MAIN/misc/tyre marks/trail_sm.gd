@@ -108,6 +108,9 @@ func _process(_delta):
 			current_trail.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 			for i in vertices:
 				if len(i)>0:
+					# with the vulkan renderer (forward+ and mobile) you will get the following error
+					## "draw_list_draw: Too few vertices (2) for the render primitive set in the render pipeline (3)."
+					
 					current_trail.surface_add_vertex(i[0] -global_transform.origin)
 					current_trail.surface_add_vertex(i[1] -global_transform.origin)
 				
