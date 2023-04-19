@@ -1,8 +1,5 @@
-my attempt at porting this to godot 4,  
-the project runs but it has lots of visual issues,  
-main problem tho is that the wheels spin like crazy,  
-check wheel.gd script line 188,  
-
+g-rcp2 for godot 4,  
+lighting on the test track looks ass. i think it got corrupted when converting the project to godot4  
 
 
 # Original readme :  
