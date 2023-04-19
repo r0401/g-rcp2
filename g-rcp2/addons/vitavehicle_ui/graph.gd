@@ -53,7 +53,6 @@ var peakhp = [0.0,0.0]
 var peaktq = [0.0,0.0]
 
 func draw_():
-
 	peakhp = [0.0,0.0]
 	peaktq = [0.0,0.0]
 	$torque.clear_points()

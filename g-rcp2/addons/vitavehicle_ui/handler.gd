@@ -11,7 +11,7 @@ var eds = ed.get_editor_interface().get_selection()
 func entered_engine():
 	for i in $Engine_Tuner/tune/container.get_children():
 		if i.get_class() == "CheckBox":
-			i.pressed = $Engine_Tuner/power_graph.get(i.var_name)
+			i.button_pressed = $Engine_Tuner/power_graph.get(str(i.var_name))
 		elif i.get_class() == "SpinBox":
 			i.value = $Engine_Tuner/power_graph.get(i.var_name)
 		if i.get_node("varname").text == "":
@@ -24,7 +24,7 @@ func refresh():
 	$Engine_Tuner/power_graph.draw_()
 	var peak = max($Engine_Tuner/power_graph.peaktq[0],$Engine_Tuner/power_graph.peakhp[0])
 	if peak>0:
-		$Engine_Tuner/power_graph.scale = 1.0/peak
+		$Engine_Tuner/power_graph.graph_scale = 1.0/peak
 	$Engine_Tuner/power_graph.draw_()
 
 	var hpunit = "hp"
@@ -49,7 +49,7 @@ func _process(delta):
 	if not changed_graph_size == $Engine_Tuner/power_graph.size and engine_enabled:
 		changed_graph_size = $Engine_Tuner/power_graph.size
 		$Engine_Tuner/power_graph.draw_()
-
+	
 	if engine_enabled:
 		for i in $Engine_Tuner/tune/container.get_children():
 			if i.get_class() == "SpinBox":
@@ -57,8 +57,10 @@ func _process(delta):
 					$Engine_Tuner/power_graph.set(i.var_name, float(i.value))
 					refresh()
 			elif i.get_class() == "CheckBox":
-				if not $Engine_Tuner/power_graph.get(i.var_name) == i.pressed:
-					$Engine_Tuner/power_graph.set(i.var_name, i.pressed)
+#				print(i)
+#				print(i.var_name)
+				if not $Engine_Tuner/power_graph.get(str(i.var_name)) == i.button_pressed:
+					$Engine_Tuner/power_graph.set(i.var_name, i.button_pressed)
 					refresh()
 
 var nods_buffer = []
@@ -196,11 +198,11 @@ func confirm(state):
 				if i.get_class() == "SpinBox":
 					n.set(i.var_name,float(i.value))
 				elif i.get_class() == "CheckBox":
-					n.set(i.var_name,i.pressed)
+					n.set(i.var_name,i.button_pressed)
 	elif state == "engine_append":
 		for i in $Engine_Tuner/tune/container.get_children():
 			for n in nods_buffer:
 				if i.get_class() == "SpinBox":
 					i.value = float(n.get(i.var_name))
 				elif i.get_class() == "CheckBox":
-					i.pressed = n.get(i.var_name)
+					i.button_pressed = n.get(i.var_name)

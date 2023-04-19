@@ -19,7 +19,7 @@ func _enter_tree():
 	
 	get_editor_interface().get_editor_main_screen().add_child(main_panel_instance)
 	
-	make_visible(false)
+	_make_visible(false)
 
 
 func _exit_tree():
@@ -27,19 +27,19 @@ func _exit_tree():
 		main_panel_instance.queue_free()
 
 
-func has_main_screen():
+func _has_main_screen():
 	return true
 
 
-func make_visible(visible):
+func _make_visible(visible):
 	if main_panel_instance:
 		main_panel_instance.visible = visible
 
 
-func get_plugin_name():
+func _get_plugin_name():
 	return "VitaVehicle Interface"
 
-func get_plugin_icon():
+func _get_plugin_icon():
 	# Must return some kind of Texture for the icon.
 	return get_editor_interface().get_base_control().get_theme_icon("Node", "EditorIcons")
 
