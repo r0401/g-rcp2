@@ -1,5 +1,4 @@
 g-rcp2 for godot 4,  
-lighting on the test track looks ass. i think it got corrupted when converting the project to godot4  
 
 ported on godot v4.0.1.stable (v4.0.1.stable.official [cacf49999]),
 so its best to use this version or higher 
