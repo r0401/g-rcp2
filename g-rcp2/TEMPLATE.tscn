@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://crtwme8ggggra" path="res://base car.tscn" id="1"]
 [ext_resource type="Script" path="res://MAIN/misc/camera.gd" id="2"]
 [ext_resource type="Script" path="res://MAIN/ground_surface_variables.gd" id="3"]
-[ext_resource type="Texture2D" uid="uid://cv0iolhv1qxsn" path="res://MISC/scene swapper/scenes/Test Scene/assets/Grid.png" id="4_qcl7s"]
+[ext_resource type="Texture2D" uid="uid://cv0iolhv1qxsn" path="res://Grid.png" id="4_qcl7s"]
 [ext_resource type="Environment" uid="uid://bq6v8uwwvme1g" path="res://default_env.tres" id="5_7vr0j"]
 
 [sub_resource type="ConcavePolygonShape3D" id="5"]
